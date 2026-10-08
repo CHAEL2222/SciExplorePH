@@ -1,0 +1,28 @@
+:root {
+  --ion-color-primary: #005B96;
+  --ion-color-secondary: #FF7A00;
+  --ion-color-tertiary: #28C76F;
+  --ion-color-warning: #FEC808;
+  --ion-color-danger: #EA5455;
+  --ion-background-color: #F8FBFF;
+  --ion-font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+ion-content {
+  --background: linear-gradient(180deg, #F0F7FF 0%, #FFFFFF 100%);
+}
+
+.hero-card {
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, #0077B6 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin: 16px;
+}
+
+.feature-card {
+  --border-radius: 16px;
+  --background: white;
+  box-shadow: 0 4px 20px rgba(0,91,150,0.08);
+  margin: 8px 16px;
+} 
