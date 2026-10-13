@@ -7,19 +7,26 @@
         ><small>Curiosity starts here.</small></span
       ></a
     >
+    <button
+      class="mobile-chat-button"
+      aria-label="Open Explore chat"
+      (click)="chatOpen.set(true)"
+    >
+      ✧
+    </button>
     <div class="nav-label">YOUR LEARNING SPACE</div>
     <nav aria-label="Main navigation">
       <a routerLink="/" [class.active]="view === 'dashboard'"
-        ><span>▦</span> Overview</a
+        ><span>▦</span><span class="nav-text">Home</span></a
       >
       <a routerLink="/lessons" [class.active]="view === 'lessons'"
-        ><span>▤</span> Explore lessons</a
+        ><span>▤</span><span class="nav-text">Lessons</span></a
       >
       <a routerLink="/quizzes" [class.active]="view === 'quizzes'"
-        ><span>◎</span> Practice quizzes</a
+        ><span>◎</span><span class="nav-text">Quizzes</span></a
       >
       <a routerLink="/progress" [class.active]="view === 'progress'"
-        ><span>↗</span> My progress</a
+        ><span>↗</span><span class="nav-text">Progress</span></a
       >
     </nav>
     <div class="sidebar-help">

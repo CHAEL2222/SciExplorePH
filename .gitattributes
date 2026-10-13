@@ -1,0 +1,2 @@
+# Keep the Windows Gradle launcher portable without CRLF noise in Git diffs.
+*.bat text eol=crlf

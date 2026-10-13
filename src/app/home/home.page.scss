@@ -1304,3 +1304,267 @@ footer {
 .lesson-dialog::backdrop {
   background: #20182f80;
 }
+
+.mobile-chat-button {
+  display: none;
+}
+nav a .nav-text {
+  font-size: inherit;
+  width: auto;
+}
+@media (max-width: 650px) {
+  .sidebar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: calc(12px + env(safe-area-inset-top))
+      max(18px, env(safe-area-inset-right)) 12px
+      max(18px, env(safe-area-inset-left));
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .brand {
+    min-height: 44px;
+  }
+  .mobile-chat-button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #eee7fa;
+    color: #7052ab;
+    font-size: 28px;
+  }
+  nav {
+    position: fixed;
+    inset: auto 0 0;
+    margin: 0;
+    padding: 8px max(8px, env(safe-area-inset-right))
+      calc(8px + env(safe-area-inset-bottom))
+      max(8px, env(safe-area-inset-left));
+    background: #fff;
+    border-top: 1px solid #e5dff0;
+    gap: 4px;
+    z-index: 15;
+  }
+  nav a {
+    flex: 1;
+    flex-direction: column;
+    min-height: 54px;
+    padding: 7px 4px;
+    font-size: 11px;
+    gap: 5px;
+  }
+  nav a > span:first-child {
+    font-size: 22px;
+    width: auto;
+  }
+  .topbar {
+    display: none;
+  }
+  main {
+    padding-bottom: calc(95px + env(safe-area-inset-bottom));
+  }
+  .page-heading p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #777180;
+  }
+  .eyebrow {
+    font-size: 10px;
+  }
+  .hero {
+    min-height: 275px;
+  }
+  .hero-copy {
+    max-width: 100%;
+  }
+  .hero h2 {
+    font-size: 31px;
+  }
+  .hero p {
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .hero-foot {
+    font-size: 9px;
+  }
+  .science-art {
+    right: -110px;
+    top: 40px;
+    opacity: 0.35;
+  }
+  .primary {
+    min-height: 46px;
+    font-size: 13px;
+  }
+  .pill {
+    font-size: 9px;
+  }
+  .stats p {
+    font-size: 11px;
+    color: #78707f;
+  }
+  .section-heading h2 {
+    font-size: 19px;
+  }
+  .section-heading p {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .section-heading a {
+    font-size: 12px;
+  }
+  .filters button {
+    min-height: 44px;
+    padding: 10px 17px;
+    font-size: 13px;
+  }
+  .search {
+    min-height: 48px;
+  }
+  .search input {
+    min-height: 44px;
+    font-size: 16px;
+  }
+  .lesson-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .lesson-art {
+    height: 150px;
+  }
+  .lesson-illustration {
+    font-size: 95px;
+    line-height: 155px;
+  }
+  .lesson-body {
+    padding: 18px 18px 0;
+  }
+  .lesson-body h3 {
+    font-size: 19px;
+  }
+  .lesson-body p {
+    font-size: 14px;
+    color: #79717f;
+  }
+  .lesson-meta,
+  .grade,
+  .card-subject {
+    font-size: 11px;
+  }
+  .lesson-footer {
+    min-height: 48px;
+    align-items: center;
+    font-size: 13px;
+  }
+  .ai-card > p,
+  .daily-card p,
+  .journey-card p {
+    font-size: 14px;
+    color: #81758d;
+  }
+  .sample-question {
+    font-size: 12px;
+  }
+  .ai-caption,
+  .journey-card small {
+    font-size: 11px;
+  }
+  .daily-card button {
+    min-height: 44px;
+    font-size: 13px;
+  }
+  .journey-card h3 {
+    font-size: 16px;
+  }
+  .milestone,
+  .milestone strong {
+    font-size: 13px;
+  }
+  .chat-panel {
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
+    border-radius: 0;
+    border: 0;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .chat-header {
+    min-height: 76px;
+  }
+  .chat-header button,
+  .dialog-top button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .chat-header small {
+    font-size: 12px;
+  }
+  .chat-messages {
+    font-size: 15px;
+  }
+  .chat-welcome p,
+  .chat-welcome button {
+    font-size: 14px;
+  }
+  .chat-welcome button {
+    min-height: 48px;
+  }
+  .chat-tools button {
+    min-height: 44px;
+    font-size: 12px;
+  }
+  .chat-form {
+    flex-shrink: 0;
+  }
+  .chat-form input {
+    font-size: 16px;
+    min-height: 44px;
+  }
+  .chat-form button {
+    min-width: 44px;
+  }
+  .chat-note {
+    font-size: 11px;
+  }
+  .message small {
+    font-size: 11px;
+  }
+  .lesson-dialog {
+    max-height: calc(
+      100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px
+    );
+  }
+  .quiz button {
+    min-height: 48px;
+    font-size: 15px;
+  }
+  .dialog-actions > button:last-child {
+    min-height: 44px;
+    font-size: 13px;
+  }
+  footer {
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 651px) {
+  .sidebar {
+    padding-top: calc(35px + env(safe-area-inset-top));
+    padding-left: max(23px, env(safe-area-inset-left));
+  }
+  .topbar {
+    height: calc(80px + env(safe-area-inset-top));
+    padding-top: env(safe-area-inset-top);
+    padding-right: max(38px, env(safe-area-inset-right));
+  }
+  .chat-panel {
+    right: max(24px, env(safe-area-inset-right));
+    bottom: max(24px, env(safe-area-inset-bottom));
+  }
+}

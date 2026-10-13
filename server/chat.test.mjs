@@ -96,3 +96,43 @@ test("upstream errors expose no provider details", () =>
       });
     },
   ));
+
+test("native app origins require an explicit allowlist and handle preflight", () =>
+  withServer(
+    {
+      apiKey: "",
+      allowedOrigins: ["capacitor://localhost", "https://localhost"],
+    },
+    async (url) => {
+      for (const origin of ["capacitor://localhost", "https://localhost"]) {
+        const preflight = await fetch(url + "/api/chat", {
+          method: "OPTIONS",
+          headers: {
+            Origin: origin,
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "Content-Type",
+          },
+        });
+        assert.equal(preflight.status, 204);
+        assert.equal(
+          preflight.headers.get("Access-Control-Allow-Origin"),
+          origin,
+        );
+        assert.equal(
+          preflight.headers.get("Access-Control-Allow-Headers"),
+          "Content-Type",
+        );
+        const status = await fetch(url + "/api/chat/status", {
+          headers: { Origin: origin },
+        });
+        assert.equal(status.status, 200);
+        assert.equal(status.headers.get("Access-Control-Allow-Origin"), origin);
+      }
+      const rejected = await fetch(url + "/api/chat", {
+        method: "OPTIONS",
+        headers: { Origin: "https://untrusted.example" },
+      });
+      assert.equal(rejected.status, 403);
+      assert.equal(rejected.headers.get("Access-Control-Allow-Origin"), null);
+    },
+  ));

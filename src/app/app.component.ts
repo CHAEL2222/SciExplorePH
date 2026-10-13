@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Capacitor, SystemBars, SystemBarsStyle } from '@capacitor/core';
 
 @Component({
   selector: 'app-root',
@@ -6,6 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
-export class AppComponent {
-  constructor() {}
+export class AppComponent implements OnInit {
+  ngOnInit() {
+    if (Capacitor.isNativePlatform()) {
+      void SystemBars.setStyle({ style: SystemBarsStyle.Light }).catch(
+        () => {},
+      );
+    }
+  }
 }

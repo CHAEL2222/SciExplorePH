@@ -4,6 +4,10 @@ import { pathToFileURL } from "node:url";
 export function createChatServer({
   apiKey = process.env.GEMINI_API_KEY,
   request = fetch,
+  allowedOrigins = (process.env.CHAT_ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean),
 } = {}) {
   let active = 0;
   return http.createServer(async (req, res) => {
@@ -14,20 +18,37 @@ export function createChatServer({
       });
       res.end(JSON.stringify(body));
     };
+    const origin = req.headers.origin;
+    try {
+      if (origin) {
+        const parsed = new URL(origin);
+        if (
+          parsed.host !== req.headers.host &&
+          !allowedOrigins.includes(origin)
+        ) {
+          return reply(403, { error: "Origin not allowed" });
+        }
+        res.setHeader("Access-Control-Allow-Origin", origin);
+        res.setHeader("Vary", "Origin");
+      }
+    } catch {
+      return reply(403, { error: "Invalid origin" });
+    }
+    if (
+      req.method === "OPTIONS" &&
+      ["/api/chat", "/api/chat/status"].includes(req.url)
+    ) {
+      res.writeHead(204, {
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Cache-Control": "no-store",
+      });
+      return res.end();
+    }
     if (req.url === "/api/chat/status" && req.method === "GET")
       return reply(200, { available: Boolean(apiKey) });
     if (req.url !== "/api/chat" || req.method !== "POST")
       return reply(404, { error: "Not found" });
-    // Browser requests must come through the same-origin development proxy.
-    try {
-      if (
-        req.headers.origin &&
-        new URL(req.headers.origin).host !== req.headers.host
-      )
-        return reply(403, { error: "Origin not allowed" });
-    } catch {
-      return reply(403, { error: "Invalid origin" });
-    }
     if (!apiKey) return reply(503, { error: "Live AI is not configured" });
     if (active >= 3) return reply(429, { error: "Please try again shortly" });
     active++;

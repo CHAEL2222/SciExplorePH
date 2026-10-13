@@ -9,6 +9,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { DestroyRef, NgZone } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { App } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
+import { ChatConnectionService } from '../shared/services/chat-connection.service';
 import { LessonsService } from '../shared/services/lessons.service';
 import { Lesson } from '../shared/models';
 
@@ -22,6 +27,9 @@ import { Lesson } from '../shared/models';
 export class HomePage {
   ls = inject(LessonsService);
   private router = inject(Router);
+  private chat = inject(ChatConnectionService);
+  private destroyRef = inject(DestroyRef);
+  private zone = inject(NgZone);
 
   @ViewChild('lessonDialog') lessonDialog?: ElementRef<HTMLDialogElement>;
   @ViewChild('conversation') conversation?: ElementRef<HTMLElement>;
@@ -48,13 +56,23 @@ export class HomePage {
     const route = inject(ActivatedRoute);
 
     this.lessons = ls.getAll();
-    route.data.subscribe((data) => {
+    route.data.pipe(takeUntilDestroyed()).subscribe((data) => {
       this.view = data['view'] || 'dashboard';
     });
-    void fetch('/api/chat/status')
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => this.liveAI.set(data?.available === true))
-      .catch(() => {});
+    void this.chat.available().then((available) => this.liveAI.set(available));
+    if (Capacitor.getPlatform() === 'android') {
+      const listener = App.addListener('backButton', () =>
+        this.zone.run(() => {
+          if (this.selected()) this.selected.set(null);
+          else if (this.chatOpen()) this.chatOpen.set(false);
+          else if (this.view !== 'dashboard') void this.router.navigate(['/']);
+          else void App.exitApp();
+        }),
+      );
+      this.destroyRef.onDestroy(() => {
+        void listener.then((handle) => handle.remove());
+      });
+    }
   }
   get filtered() {
     return this.lessons.filter(
@@ -84,10 +102,6 @@ export class HomePage {
   startLearning() {
     this.open(this.nextLesson);
   }
-  onSearch() {
-    if (this.search.trim() && this.view !== 'lessons')
-      void this.router.navigate(['/lessons']);
-  }
   async send(prompt = this.draft) {
     const text = prompt.trim().slice(0, 1500);
     if (!text || this.busy()) return;
@@ -101,20 +115,10 @@ export class HomePage {
     try {
       let reply: string;
       if (this.liveAI()) {
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            messages: this.messages().slice(-12),
-            lesson: this.lessonContext || '',
-          }),
-          signal: AbortSignal.timeout(25000),
+        reply = await this.chat.send({
+          messages: this.messages().slice(-12),
+          lesson: this.lessonContext,
         });
-        if (!response.ok) throw new Error('Chat unavailable');
-        const data = await response.json();
-        if (typeof data.reply !== 'string' || !data.reply.trim())
-          throw new Error('Empty response');
-        reply = data.reply;
       } else {
         const terms = text.toLowerCase().match(/[a-z]{4,}/g) || [];
         const ranked = this.lessons

@@ -1,5 +1,5 @@
 {
-  "name": "myApp",
+  "name": "sciexploreph",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
@@ -11,7 +11,11 @@
     "test": "ng test",
     "lint": "ng lint",
     "chat": "node server/chat.mjs",
-    "test:server": "node --test server/chat.test.mjs"
+    "test:server": "node --test server/chat.test.mjs",
+    "mobile:sync": "node scripts/mobile-sync.mjs",
+    "android:open": "cap open android",
+    "ios:open": "cap open ios",
+    "android:apk": "npm run mobile:sync && cd android && ./gradlew assembleDebug"
   },
   "private": true,
   "dependencies": {
@@ -22,9 +26,11 @@
     "@angular/platform-browser": "22.1.7",
     "@angular/platform-browser-dynamic": "22.1.7",
     "@angular/router": "22.1.7",
+    "@capacitor/android": "8.5.3",
     "@capacitor/app": "8.1.2",
     "@capacitor/core": "8.5.3",
     "@capacitor/haptics": "8.0.2",
+    "@capacitor/ios": "8.5.3",
     "@capacitor/keyboard": "8.0.6",
     "@capacitor/status-bar": "8.0.4",
     "@ionic/angular": "^9.0.0",
