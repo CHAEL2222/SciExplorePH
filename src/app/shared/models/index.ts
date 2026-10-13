@@ -6,12 +6,10 @@ export interface Lesson {
   description: string;
   content: string;
   progress: number;
-}
-
-export interface Feature {
-  title: string;
-  desc: string;
   icon: string;
-  route: string;
-  color: string;
+  minutes: number;
+  question: string;
+  options: string[];
+  answer: number;
+  explanation: string;
 }
